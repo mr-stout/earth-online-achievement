@@ -3,6 +3,7 @@ type Achievement = {
     description: string,
     rate: number,
     iconURL?: string,
+    initChecked?: boolean
 }
 
 const achievement_list : Achievement[] = [
@@ -803,7 +804,7 @@ const achievement_list : Achievement[] = [
     },
     {
         title: "全新无损!",
-        description: "全新无损!",
+        description: "期末结束后拥有至少一本全新的教科书",
         rate: 20.5,
     },
     {
