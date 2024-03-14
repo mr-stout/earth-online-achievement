@@ -4,11 +4,13 @@
       width: 480px;
       grid-template-rows: 90px;
       grid-template-columns: 100px 250px 100px">
-    <input type="checkbox" style="height: 70px; margin: 10px 0;
-      border: 2px #cfd213;">
+    <input
+        @change="check_handler"
+        type="checkbox" style="height: 70px; margin: 10px 0;
+        border: 2px #cfd213;">
     <div style="margin: 10px 5px 10px 10px; display: grid;
       grid-template-rows: 40px 40px;">
-      <p style="margin: 0; font-size: 24px; text-align: left;"> {{title}} </p>
+      <p :style="`margin: 0; font-weight: bold; font-size: ${title.length > 10 ? 24 - title.length + 6 : 24}px; text-align: left;`"> {{title}} </p>
       <p style="margin: 0; font-size: 14px; text-align: left;"> {{description}} </p>
     </div>
     <div style="
@@ -42,6 +44,10 @@ export default {
       type: Number,
       default: 0,
     },
+    check_handler: {
+      type: Function,
+      default: () => {},
+    }
   },
 }
 </script>

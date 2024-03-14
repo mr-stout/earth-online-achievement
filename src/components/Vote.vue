@@ -8,9 +8,13 @@
                 :description="obj.description"
                 :rate="obj.rate"
                 :idx="idx"
+                :check_handler="handleCheckboxChanged"
             />
     </div>
+    <img style="margin-top: 20px; " src="https://badges.toozhao.com/badges/01HRY5G34JQNASRKFEDW94D439/green.svg" />
+    <p style="color: white; text-align: center;"> 您的成就达成数为 {{num_checked}} / {{item_list.length}}，成就达成率 {{(num_checked * 100.0 / item_list.length).toFixed(2)}} %</p>
     <p style="color: white; text-align: left;">文案及创意来源：https://tieba.baidu.com/p/8933436316</p>
+    <p style="color: white; text-align: left;">项目开源地址：https://github.com/mr-stout/earth-online-achievement</p>
   </div>
 </template>
 
@@ -25,7 +29,18 @@ export default {
   },
   data: () => {
     return {
-      item_list: achievement_list
+      item_list: achievement_list,
+      num_checked: 0,
+    }
+  },
+  methods: {
+    handleCheckboxChanged(evt){
+      const isChecked = evt.target.checked
+      if (isChecked) {
+        this.num_checked += 1
+      } else {
+        this.num_checked -= 1
+      }
     }
   }
 }
