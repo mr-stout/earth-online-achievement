@@ -5,6 +5,8 @@
       grid-template-rows: 90px;
       grid-template-columns: 100px 250px 100px">
     <input
+        ref="checkbox"
+        v-model="checked"
         @change="check_handler"
         type="checkbox" style="height: 70px; margin: 10px 0;
         border: 2px #cfd213;">
@@ -37,16 +39,25 @@ export default {
       default: "收到邮寄的大学录取通知书",
     },
     rate: {
-      type: String,
-      default: "100.0",
+      type: Number,
+      default: 100.0,
     },
     idx: {
       type: Number,
       default: 0,
     },
+    init_checked: {
+      type: Boolean,
+      default: false,
+    },
     check_handler: {
       type: Function,
       default: () => {},
+    }
+  },
+  data(){
+    return {
+      checked: this.init_checked
     }
   },
 }
