@@ -12,7 +12,7 @@
         border: 2px #cfd213;">
     <div style="margin: 10px 5px 10px 10px; display: grid;
       grid-template-rows: 40px 40px;">
-      <p :style="`margin: 0; font-weight: bold; font-size: ${title.length > 10 ? 24 - title.length + 6 : 24}px; text-align: left;`"> {{title}} </p>
+      <p :style="`margin: 0; font-weight: bold; font-size: ${!!title_font_size ? title_font_size :  (title.length > 10 ? 24 - title.length + 6 : 24) + 'px'}; text-align: left;`"> {{title}} </p>
       <p style="margin: 0; font-size: 14px; text-align: left;"> {{description}} </p>
     </div>
     <div style="
@@ -53,6 +53,10 @@ export default {
     check_handler: {
       type: Function,
       default: () => {},
+    },
+    title_font_size: {
+      type: String,
+      default: undefined,
     }
   },
   data(){

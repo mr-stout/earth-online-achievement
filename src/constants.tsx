@@ -4,6 +4,7 @@ type Achievement = {
     rate: number,
     iconURL?: string,
     initChecked?: boolean
+    titleFontSize?: string,
 }
 
 const achievement_list : Achievement[] = [
@@ -496,6 +497,7 @@ const achievement_list : Achievement[] = [
         title: "I AM THE STORM THAT IS APPROACHING",
         description: "在暴风雪天气下不穿袜子前往山上澡堂",
         rate: 44.1,
+        titleFontSize: "12px",
     },
     {
         title: "抱歉，今天不行",
@@ -661,6 +663,7 @@ const achievement_list : Achievement[] = [
         title: "丑八怪↑↓↑↓↑↑↓",
         description: "用卡套遮盖自己过于丑陋的校园卡照片",
         rate: 64.7,
+        titleFontSize: "20px",
     },
     {
         title: "滑融道",
@@ -783,7 +786,7 @@ const achievement_list : Achievement[] = [
         rate: 8.8,
     },
     {
-        title: "999ms",
+        title: "HTTP 503",
         description: "在开始选课的15分钟后依然无法进入页面",
         rate: 36.4,
     },
@@ -841,6 +844,27 @@ const achievement_list : Achievement[] = [
         title: "隐藏楼层 ?",
         description: "抵达学子餐厅四楼",
         rate: 21.8,
+    },
+    {
+        title: "稳如老狗",
+        description: "大学期间所有课程均未挂科",
+        rate: 50.4,
+    },
+    {
+        title: "你什么工大2.0",
+        description: "至少一次被亲戚朋友问到哈尔滨冷不冷",
+        rate: 73.2,
+    },
+    {
+        title: "我的朋友很少",
+        description: "大学期间结交的朋友不超过10个",
+        rate: 25.6,
+    },
+    {
+        title: "前辈！这个也拜托了！",
+        description: "大学期间结交的朋友超过30个",
+        rate: 20.7,
+        titleFontSize: "20px",
     },
 ]
 

@@ -7,6 +7,7 @@
       <VoteItem :title="obj.title"
                 :description="obj.description"
                 :rate="obj.rate"
+                :title_font_size="obj.titleFontSize"
                 :idx="idx"
                 :init_checked="!!obj.initChecked"
                 :check_handler="(evt) => handleCheckboxChanged(evt, idx)"
@@ -47,7 +48,8 @@ export default {
     }
 
     const data = this.init_data[1]
-    for (let i = 0 ; i < data.length ; i++){
+    // 如果前面添加的成就列表顺序不发生变化，生成的01数据串保证前向兼容性和后向兼容性
+    for (let i = 0 ; i < Math.min(data.length, this.item_list.length) ; i++){
       if (data[i] === '1') {
         this.item_list[i].initChecked = true;
         this.checked_list[i] = true;
