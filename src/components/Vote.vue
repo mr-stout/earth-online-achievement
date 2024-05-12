@@ -1,7 +1,11 @@
 <template>
   <div style="background-color: #3a2b62;">
     <h1 style="color: white;">校园成就</h1>
-    <p style="color: white;">哈尔滨工业大学（威海校区）版</p>
+    <select name="lists" style="font-size: 24px; background: rgb(58,43,98); color: white; border: 0;">
+      <option v-for="(item, _) in form_list" :value="item.id"
+              style="color: white;"
+      >{{item.label}}</option>
+    </select>
     <p style="color: white; text-align: left;">注：静态页面，暂无统计功能，后面可能会做</p>
     <div v-for="(obj, idx) in item_list">
       <VoteItem :title="obj.title"
@@ -25,8 +29,8 @@
   </div>
 </template>
 
-<script>
-import {achievement_list} from "../constants.tsx";
+<script type="tsx">
+import {demo_achievement_list, demo_achievement_name} from "../constants.tsx";
 import VoteItem from "./VoteItem.vue";
 
 export default {
@@ -36,8 +40,12 @@ export default {
   },
   data: () => {
     return {
-      item_list: achievement_list,
-      checked_list: achievement_list.map((val) => {val.initChecked}),
+      form_list: [{
+        id: 1,
+        label: demo_achievement_name
+      }],
+      item_list: demo_achievement_list,
+      checked_list: demo_achievement_list.map((val) => {val.initChecked}),
       init_data: window.location.href.split('='),
       num_checked: 0,
     }

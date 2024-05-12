@@ -7,7 +7,8 @@ type Achievement = {
     titleFontSize?: string,
 }
 
-const achievement_list : Achievement[] = [
+export const demo_achievement_name = '哈尔滨工业大学（威海校区）'
+export const demo_achievement_list : Achievement[] = [
     {
         title: "尘埃落定",
         description: "收到邮寄的大学录取通知书",
@@ -867,7 +868,3 @@ const achievement_list : Achievement[] = [
         titleFontSize: "20px",
     },
 ]
-
-export {
-    achievement_list
-}
