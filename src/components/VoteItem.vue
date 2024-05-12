@@ -20,8 +20,8 @@
       display: grid;
       grid-template-rows: 20px 33px 30px;">
       <img style="margin: 18px 0;" src="/public/trophy-prize-svgrepo.svg" >
-      <p style="margin: 0; width: 100%; text-align: right;"> {{rate}} % </p>
-      <progress style="margin: 0; width: 100%;" :max="100" :value="rate"></progress>
+      <p style="margin: 0; width: 100%; text-align: right;"> {{rate}}</p>
+      <progress style="margin: 0; width: 100%;" :max="100" :value="cvtRate(rate)"></progress>
     </div>
   </div>
 </template>
@@ -39,8 +39,8 @@ export default {
       default: "收到邮寄的大学录取通知书",
     },
     rate: {
-      type: Number,
-      default: 100.0,
+      type: String,
+      default: "0.0",
     },
     idx: {
       type: Number,
@@ -62,6 +62,17 @@ export default {
   data(){
     return {
       checked: this.init_checked
+    }
+  },
+  methods: {
+    cvtRate(rate) {
+      if (!rate || !rate.length || rate.length === 0) {
+        return 0
+      }
+      if(!rate.endsWith("%")){
+        return 0
+      }
+      return Number(rate.slice(0, rate.length - 1));
     }
   },
 }
