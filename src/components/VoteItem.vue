@@ -6,6 +6,7 @@
       grid-template-columns: 100px 250px 100px">
     <input
         ref="checkbox"
+        :id="`card-input-${idx}`"
         v-model="checked"
         @change="check_handler"
         type="checkbox" style="height: 70px; margin: 10px 0;

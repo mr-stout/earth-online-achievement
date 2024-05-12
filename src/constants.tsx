@@ -1,5 +1,17 @@
+export type ApiRespGetAllList = {
+    id: number,
+    name: string,
+    items: Achievement[]
+}[]
+
 export type ApiArgsGetSpecificStat = {
     list_id: number,
+}
+
+export type ApiRespGetSpecificStat = {
+    id: number,
+    name: string,
+    items: Achievement[]
 }
 
 export type ApiArgsFillForm = {
@@ -8,10 +20,16 @@ export type ApiArgsFillForm = {
     data: number[]
 }
 
+export type ApiRespFillForm = {
+}
 
 export type ApiArgsGetFilledForm = {
     list_id: number,
     user_name: string,
+}
+
+export type ApiRespGetFilledForm = {
+    data: number[]
 }
 
 export type ApiResp = {
@@ -30,6 +48,7 @@ type Achievement = {
     title: string,
     desc: string,
     rate: string,
+    id?: number,
     iconURL?: string,
     initChecked?: boolean
     titleFontSize?: string,
