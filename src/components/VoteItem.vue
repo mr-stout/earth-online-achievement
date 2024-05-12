@@ -12,7 +12,7 @@
         border: 2px #cfd213;">
     <div style="margin: 10px 5px 10px 10px; display: grid;
       grid-template-rows: 40px 40px;">
-      <p :style="`margin: 0; font-weight: bold; font-size: ${!!title_font_size ? title_font_size :  (title.length > 10 ? 24 - title.length + 6 : 24) + 'px'}; text-align: left;`"> {{title}} </p>
+      <p :style="`margin: 0; font-weight: bold; font-size: ${!!title_font_size ? title_font_size :  (title.length > 8 ? 24 - title.length + 6 : 24) + 'px'}; text-align: left;`"> {{title}} </p>
       <p style="margin: 0; font-size: 14px; text-align: left;"> {{description}} </p>
     </div>
     <div style="
@@ -20,7 +20,7 @@
       display: grid;
       grid-template-rows: 20px 33px 30px;">
       <img style="margin: 18px 0;" src="/public/trophy-prize-svgrepo.svg" >
-      <p style="margin: 0; width: 100%; text-align: right;"> {{rate}}</p>
+      <p :style="`margin: 0; width: 100%; text-align: right; ${isRateNumber(rate) ? '' : 'font-size: 12px; line-height: 24px; color: #808080;' }}`"> {{rate}}</p>
       <progress style="margin: 0; width: 100%;" :max="100" :value="cvtRate(rate)"></progress>
     </div>
   </div>
@@ -65,11 +65,14 @@ export default {
     }
   },
   methods: {
-    cvtRate(rate) {
+    isRateNumber(rate){
       if (!rate || !rate.length || rate.length === 0) {
-        return 0
+        return false
       }
-      if(!rate.endsWith("%")){
+      return rate.endsWith("%");
+    },
+    cvtRate(rate) {
+      if (!this.isRateNumber(rate)) {
         return 0
       }
       return Number(rate.slice(0, rate.length - 1));
