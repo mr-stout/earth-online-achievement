@@ -7,6 +7,8 @@
   <div style="background-color: #3a2b62;">
     <h1 style="color: white;">校园成就</h1>
     <select name="lists"
+            ref="s-lists"
+            :disabled="is_switch_form_disabled"
             @change="handleFormChanged">
       <!-- 注：value是数组下标，而不是list_id -->
       <option v-for="(item, idx) in form_list" :value="idx">
@@ -83,6 +85,7 @@ export default {
     return {
       is_connected: true,
       is_others: false,
+      is_switch_form_disabled: false,
       others_name: "",
       form_list: [{
         id: 1,
@@ -109,6 +112,7 @@ export default {
   },
   async mounted() {
     // 获取初始数据
+    let form_list_map = {} as any
     // - 获取所有工程
     await wrappedFetch(`${url_base}${url_get_all_list}`).then((data) => {
       if (!data || data.length === 0) {
@@ -131,7 +135,19 @@ export default {
     const params = parseURLParams() as any
     const list_id = params[PARAM_LIST_ID] as any
     const user_name = params[PARAM_USER_NAME] as any
-    if (list_id && user_name && Number(user_name).toString() !== 'NaN') {
+    for (let i = 0 ; i < this.form_list.length ; i++){
+      const form = this.form_list[i]
+      form_list_map[form.id] = {'data': form, 'idx': i}
+    }
+    if (list_id && list_id in form_list_map
+        && user_name && Number(user_name).toString() !== 'NaN') {
+      // 切换到list_id
+      this.cur_item_list = form_list_map[list_id].data.items
+      this.cur_list_id = form_list_map[list_id].data.id
+      this.$refs["s-lists"].value = form_list_map[list_id].idx
+      this.is_switch_form_disabled = true
+      this.reset()
+      // 获取填写情况
       this.is_others = true
       this.others_name = user_name
 
