@@ -16,6 +16,7 @@
       </option>
     </select>
     <select name="orders"
+            ref="s-orders"
             @change="handleOrderChanged">
       <!-- 注：value是id-->
       <option v-for="(item, _) in order_list" :value="item.id">
@@ -145,6 +146,7 @@ export default {
       this.cur_item_list = form_list_map[list_id].data.items
       this.cur_list_id = form_list_map[list_id].data.id
       this.$refs["s-lists"].value = form_list_map[list_id].idx
+      this.$refs["s-orders"].value = "1"
       this.is_switch_form_disabled = true
       this.reset()
       // 获取填写情况
