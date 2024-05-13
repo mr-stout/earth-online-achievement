@@ -55,7 +55,7 @@ type Achievement = {
 }
 
 export const demo_achievement_name = '哈尔滨工业大学（威海校区）'
-export const demo_achievement_list : Achievement[] = [
+const raw_demo_achievement_list : Achievement[] = [
     {
         title: "尘埃落定",
         desc: "收到邮寄的大学录取通知书",
@@ -915,3 +915,9 @@ export const demo_achievement_list : Achievement[] = [
         titleFontSize: "20px",
     },
 ]
+export const demo_achievement_list : Achievement[] = []
+for (let i = 0 ; i < raw_demo_achievement_list.length ; i++) {
+    const item = raw_demo_achievement_list[i]
+    item["id"] = i
+    demo_achievement_list.push(item)
+}
