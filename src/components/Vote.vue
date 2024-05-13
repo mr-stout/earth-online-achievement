@@ -327,7 +327,7 @@ export default {
       const eventName = 'copy'
       let handler = (evt: any) => {
         let arr = window.location.href.split('/')
-        let url = `${arr[0]}//${arr[2]}?${PARAM_LIST_ID}=${this.cur_list_id}&${PARAM_USER_NAME}=${username}`
+        let url = `${arr[0]}//${arr[2]}/?${PARAM_LIST_ID}=${this.cur_list_id}&${PARAM_USER_NAME}=${username}`
 
         evt.preventDefault()
         evt.clipboardData.setData('text/plain', url)
