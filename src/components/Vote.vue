@@ -270,6 +270,7 @@ export default {
       const cur_form_list = this.form_list[idx]
       this.cur_item_list = cur_form_list.items
       this.cur_list_id = cur_form_list.id
+      this.reset()
     },
     handleCheckboxChanged(evt: any, idx: number) {
       const isChecked = evt.target.checked
