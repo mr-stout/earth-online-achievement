@@ -248,6 +248,11 @@ export default {
       }
     },
     async handleShareLink() {
+      // 确定提交吗？
+      const ok = confirm("确定提交吗？")
+      if (!ok) {
+        return
+      }
       // 收集数据
       const yes_item_ids = []
       for (let i = 0; i < this.checked_list.length; i++) {
