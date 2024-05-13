@@ -27,7 +27,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "VoteItem",
   props: {
@@ -53,7 +53,7 @@ export default {
     },
     check_handler: {
       type: Function,
-      default: () => {},
+      default: (_: any) => {},
     },
     title_font_size: {
       type: String,
@@ -66,13 +66,13 @@ export default {
     }
   },
   methods: {
-    isRateNumber(rate){
+    isRateNumber(rate: string){
       if (!rate || !rate.length || rate.length === 0) {
         return false
       }
       return rate.endsWith("%");
     },
-    cvtRate(rate) {
+    cvtRate(rate: string) {
       if (!this.isRateNumber(rate)) {
         return 0
       }

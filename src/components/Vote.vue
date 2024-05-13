@@ -7,14 +7,20 @@
   <div style="background-color: #3a2b62;">
     <h1 style="color: white;">校园成就</h1>
     <select name="lists"
-            style="font-size: 24px; background: rgb(58,43,98); color: white; border: 0; margin-bottom: 20px;"
             @change="handleFormChanged">
       <!-- 注：value是数组下标，而不是list_id -->
-      <option v-for="(item, idx) in form_list" :value="idx"
-              style="color: white;"
-      >{{ item.name }}
+      <option v-for="(item, idx) in form_list" :value="idx">
+        {{ item.name }}
       </option>
     </select>
+    <select name="orders"
+            @change="handleOrderChanged">
+      <!-- 注：value是id-->
+      <option v-for="(item, _) in order_list" :value="item.id">
+        {{ item.name }}
+      </option>
+    </select>
+    <br/>
     <br/>
     <div style="color: white;" v-if="is_others">
       <p style="color: white; text-align: center;"> {{others_name}} 的成就达成数为 {{ num_checked }} / {{
@@ -31,7 +37,7 @@
                 :title_font_size="obj.titleFontSize"
                 :idx="idx"
                 :init_checked="!!obj.initChecked"
-                :check_handler="(evt) => handleCheckboxChanged(evt, idx)"
+                :check_handler="(evt: any) => handleCheckboxChanged(evt, idx)"
       />
     </div>
     <img style="margin-top: 20px; " src="https://badges.toozhao.com/badges/01HRY5G34JQNASRKFEDW94D439/green.svg"/>
@@ -41,7 +47,7 @@
         }}，成就达成率
         {{ (num_checked * 100.0 / cur_item_list.length).toFixed(2) }} %</p>
       <div v-if="is_connected">
-        <button @click="handleShareLink"> 分享结果</button>
+        <button @click="handleShareLink"> 提交并分享结果 </button>
       </div>
     </div>
 
@@ -64,8 +70,7 @@ import {
   url_get_all_list, url_get_filled_form
 } from "../constants.tsx";
 import VoteItem from "./VoteItem.vue";
-import {parseURLParams, wrappedFetch} from "../utils";
-import {send} from "vite";
+import {cvtRate, isRateNumber, parseURLParams, wrappedFetch} from "../utils";
 
 const PARAM_LIST_ID = "id"
 const PARAM_USER_NAME = "name"
@@ -84,11 +89,21 @@ export default {
         name: demo_achievement_name,
         items: demo_achievement_list
       }],
+      order_list: [{
+        id: 1,
+        name: "默认排序"
+      }, {
+        id: 2,
+        name: "升序"
+      }, {
+        id: 3,
+        name: "降序"
+      }],
       cur_list_id: 1,
       cur_item_list: demo_achievement_list,
       checked_list: demo_achievement_list.map((val) => {
         val.initChecked
-      }),
+      }) as any,
       num_checked: 0,
     }
   },
@@ -113,9 +128,9 @@ export default {
     }
 
     // 读取参数
-    const params = parseURLParams()
-    const list_id = params[PARAM_LIST_ID]
-    const user_name = params[PARAM_USER_NAME]
+    const params = parseURLParams() as any
+    const list_id = params[PARAM_LIST_ID] as any
+    const user_name = params[PARAM_USER_NAME] as any
     if (list_id && user_name && Number(user_name).toString() !== 'NaN') {
       this.is_others = true
       this.others_name = user_name
@@ -132,7 +147,7 @@ export default {
       } as RequestInit, true).then((result) => {
         let yes_item_ids = result.data
         if(!yes_item_ids) return
-        let yes_item_ids_map = {}
+        let yes_item_ids_map = {} as any
         for(let i = 0 ; i < yes_item_ids.length ; i++) {
           yes_item_ids_map[yes_item_ids[i]] = 1
         }
@@ -141,7 +156,7 @@ export default {
           const item = this.cur_item_list[i]
           if(!item.id || !(item.id in yes_item_ids_map)) continue
           // hacky, only for now
-          const ele = document.querySelector(`#card-input-${i}`)
+          const ele = document.querySelector(`#card-input-${i}`) as any
           if(!ele) continue
           ele.click()
         }
@@ -153,18 +168,76 @@ export default {
     reset() {
       this.num_checked = 0
       // noinspection TypeScriptValidateTypes
-      this.checked_list = this.cur_item_list.map((val) => (val.initChecked))
+      this.checked_list = this.cur_item_list.map((val) => (val.initChecked)) as any
+
+      for(let i = 0 ; i < this.cur_item_list.length ; i++){
+        const item = this.cur_item_list[i]
+        if(!item.id) continue
+        // hacky, only for now
+        const ele = document.querySelector(`#card-input-${i}`) as any
+        if(!ele || !ele.checked) continue
+        ele.click()
+      }
     },
     handleReplay(){
       window.location.href = window.location.href.split('?')[0]
     },
-    handleFormChanged(evt) {
+    handleOrderChanged(evt: any) {
+      const id = Number(evt.target.value)
+      const arr = [...this.cur_item_list]
+      this.reset()
+      // 升序
+      if (id == 2) {
+        arr.sort((a: any, b: any) => {
+          const is_a = isRateNumber(a.rate)
+          const is_b = isRateNumber(b.rate)
+          if(is_a && !is_b) {
+            return -1
+          }
+          if(!is_a && is_b) {
+            return 1
+          }
+          if(!is_a && !is_b){
+            return 0
+          }
+          return cvtRate(a.rate) - cvtRate(b.rate)
+        })
+        this.cur_item_list = arr
+        return
+      }
+      // 降序
+      if (id == 3) {
+        arr.sort((a: any, b: any) => {
+          const is_a = isRateNumber(a.rate)
+          const is_b = isRateNumber(b.rate)
+          if(is_a && !is_b) {
+            return -1
+          }
+          if(!is_a && is_b) {
+            return 1
+          }
+          if(!is_a && !is_b){
+            return 0
+          }
+          return cvtRate(b.rate) - cvtRate(a.rate)
+        })
+        this.cur_item_list = arr
+        return
+      }
+      // 按id排序
+      arr.sort((a: any, b: any) => {
+        return a.id - b.id;
+      })
+      this.cur_item_list = arr
+      return
+    },
+    handleFormChanged(evt: any) {
       const idx = Number(evt.target.value)
       const cur_form_list = this.form_list[idx]
       this.cur_item_list = cur_form_list.items
       this.cur_list_id = cur_form_list.id
     },
-    handleCheckboxChanged(evt, idx) {
+    handleCheckboxChanged(evt: any, idx: number) {
       const isChecked = evt.target.checked
       this.checked_list[idx] = isChecked
 
@@ -212,7 +285,7 @@ export default {
 
       // 复制到剪贴板
       const eventName = 'copy'
-      let handler = (evt) => {
+      let handler = (evt: any) => {
         let arr = window.location.href.split('/')
         let url = `${arr[0]}//${arr[2]}?${PARAM_LIST_ID}=${this.cur_list_id}&${PARAM_USER_NAME}=${username}`
 
@@ -231,4 +304,15 @@ export default {
 </script>
 
 <style scoped>
+select {
+  font-size: 24px;
+  background: rgb(58,43,98);
+  color: white;
+  border: 0;
+  margin-bottom: 20px;
+}
+
+option {
+  color: white;
+}
 </style>
