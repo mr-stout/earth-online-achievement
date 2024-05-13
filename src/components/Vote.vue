@@ -173,10 +173,7 @@ export default {
         for(let i = 0 ; i < this.cur_item_list.length ; i++){
           const item = this.cur_item_list[i]
           if(!item.id || !(item.id in yes_item_ids_map)) continue
-          // hacky, only for now
-          const ele = document.querySelector(`#card-input-${i}`) as any
-          if(!ele) continue
-          ele.click()
+          this.setCheckboxAtArr(i, true)
         }
       })
     }
@@ -191,9 +188,16 @@ export default {
       for(let i = 0 ; i < this.cur_item_list.length ; i++){
         const item = this.cur_item_list[i]
         if(!item.id) continue
-        // hacky, only for now
-        const ele = document.querySelector(`#card-input-${i}`) as any
-        if(!ele || !ele.checked) continue
+        this.setCheckboxAtArr(i, false)
+      }
+    },
+    setCheckboxAtArr(idx: number, val: boolean){
+      // hacky, only for now
+      const ele = document.querySelector(`#card-input-${idx}`) as any
+      if(!ele) return
+      if(val && !ele.checked) {
+        ele.click()
+      } else if (!val && ele.checked) {
         ele.click()
       }
     },
@@ -203,7 +207,16 @@ export default {
     handleOrderChanged(evt: any) {
       const id = Number(evt.target.value)
       const arr = [...this.cur_item_list]
-      this.reset()
+      const pre_checked_list_map = {} as any
+      for (let i = 0 ; i < this.checked_list.length ; i++) {
+        pre_checked_list_map[arr[i].id] = this.checked_list[i]
+      }
+      const f_restore_check_status = () => {
+        for(let i = 0 ; i < this.cur_item_list.length ; i++) {
+          const item = this.cur_item_list[i]
+          this.setCheckboxAtArr(i, pre_checked_list_map[item.id])
+        }
+      }
       // 升序
       if (id == 2) {
         arr.sort((a: any, b: any) => {
@@ -221,6 +234,7 @@ export default {
           return cvtRate(a.rate) - cvtRate(b.rate)
         })
         this.cur_item_list = arr
+        f_restore_check_status()
         return
       }
       // 降序
@@ -240,6 +254,7 @@ export default {
           return cvtRate(b.rate) - cvtRate(a.rate)
         })
         this.cur_item_list = arr
+        f_restore_check_status()
         return
       }
       // 按id排序
@@ -247,6 +262,7 @@ export default {
         return a.id - b.id;
       })
       this.cur_item_list = arr
+      f_restore_check_status()
       return
     },
     handleFormChanged(evt: any) {
